@@ -1,402 +1,1214 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Free English-to-8-language translator with English-readable pronunciation and browser speech.">
-<title>Say It Anywhere — Free Translator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#4f46e5">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="description" content="Translate English words and phrases into 8 languages with easy English-readable pronunciations.">
+<title>Say It Anywhere — Translate &amp; Pronounce in 8 Languages</title>
 <style>
-:root{--bg:#f4f6fb;--card:#fff;--ink:#151a2d;--muted:#68718d;--line:#e3e7f1;--a:#4f46e5;--b:#7c3aed;--phon:#087f73;--good:#147a4b;--bad:#b42318;--shadow:0 12px 34px rgba(23,31,66,.09)}
-*{box-sizing:border-box}html,body{margin:0;min-height:100%}body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:radial-gradient(1000px 450px at 8% -10%,#e0e7ff,transparent 60%),radial-gradient(850px 450px at 100% 0,#ede9fe,transparent 58%),var(--bg);color:var(--ink);padding:28px 14px 60px}.wrap{max-width:1050px;margin:auto}
-header{text-align:center;margin:8px 0 24px}h1{margin:0 0 7px;font-size:clamp(27px,5vw,38px);letter-spacing:-.8px;background:linear-gradient(100deg,var(--a),var(--b));-webkit-background-clip:text;background-clip:text;color:transparent}.sub{margin:0;color:var(--muted);line-height:1.5;font-size:14px}
-.search{display:flex;gap:9px;background:var(--card);padding:8px;border:1px solid var(--line);border-radius:17px;box-shadow:var(--shadow)}#q{flex:1;min-width:0;border:0;outline:0;background:transparent;color:var(--ink);font-size:17px;padding:12px 13px}#q::placeholder{color:#a0a8bf}button{font:inherit}.primary{border:0;border-radius:11px;padding:0 23px;color:#fff;font-weight:700;background:linear-gradient(100deg,var(--a),var(--b));cursor:pointer}.primary:disabled{opacity:.55;cursor:wait}.primary:active{transform:scale(.985)}
-.chips{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin:12px 0 18px}.chip{border:1px solid var(--line);background:#fff;color:var(--muted);padding:6px 12px;border-radius:999px;cursor:pointer;font-size:12.5px}.chip:hover{color:var(--a);border-color:#c8cef0;background:#fafaff}
-.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}.topbar{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 17px;border-bottom:1px solid var(--line);background:#fafbff;color:var(--muted);font-size:12px}.topbar strong{color:var(--ink)}.legend{display:flex;gap:13px;flex-wrap:wrap}.dot{display:inline-flex;align-items:center;gap:5px}.dot i{width:7px;height:7px;border-radius:50%;background:var(--phon);display:inline-block}
-table{width:100%;border-collapse:collapse}th{text-align:left;text-transform:uppercase;letter-spacing:.08em;font-size:11px;color:var(--muted);padding:13px 18px;background:#fafbff;border-bottom:1px solid var(--line)}td{padding:14px 18px;border-bottom:1px solid var(--line);vertical-align:top}tr:last-child td{border-bottom:0}tbody tr:hover{background:#fcfcff}.lang{display:flex;align-items:center;gap:9px;font-weight:700;font-size:14px;white-space:nowrap}.flag{font-size:19px}.translation{font-size:17px;word-break:break-word}.roman{margin-top:4px;color:#858da5;font-size:12px;font-family:ui-monospace,SFMono-Regular,Consolas,monospace}.phonetic{color:var(--phon);font-weight:700;font-size:15px;line-height:1.5;word-break:break-word}.phonetic small{display:block;color:#7b849f;font-weight:500;font-size:11px;margin-top:3px}.na{color:#aeb5c8!important;font-weight:500!important}.speak{border:0;background:transparent;cursor:pointer;margin-left:7px;padding:3px 5px;border-radius:7px;opacity:.5}.speak:hover{opacity:1;background:#eef0fb}.retry{border:1px solid var(--line);background:#fff;color:var(--muted);border-radius:7px;padding:3px 7px;cursor:pointer;font-size:11px}.skel{display:inline-block;height:16px;width:65%;border-radius:6px;background:linear-gradient(90deg,#edf0f7 25%,#e0e5f3 50%,#edf0f7 75%);background-size:200% 100%;animation:sh 1.2s infinite}@keyframes sh{to{background-position:-200% 0}}
-.status{text-align:center;min-height:20px;margin:13px 0 0;color:var(--muted);font-size:12.5px}.status.err{color:var(--bad)}.status.ok{color:var(--good)}.note{text-align:center;color:var(--muted);font-size:11.5px;line-height:1.65;margin:22px auto 0;max-width:820px}.note strong{color:var(--ink)}
-@media(max-width:700px){body{padding:20px 9px 45px}.search{padding:6px}.primary{padding:0 15px}.topbar{align-items:flex-start}.legend{display:none}table,tbody,tr,td{display:block}thead{display:none}tbody tr{padding:13px 14px;border-bottom:1px solid var(--line)}tbody tr:last-child{border:0}td{padding:3px 0;border:0}.lang{margin-bottom:7px}.translation{display:inline}.phonetic{margin-top:7px;padding:8px 10px;background:#f5fbfa;border-radius:9px}.roman{margin-top:5px}.speak{float:right}.search #q{font-size:16px;padding:11px 9px}.chips{justify-content:flex-start;overflow:auto;flex-wrap:nowrap;padding-bottom:2px}.chip{white-space:nowrap}}
+  :root{
+    --bg:#eef1f9;
+    --card:#ffffff;
+    --ink:#131829;
+    --muted:#6b7391;
+    --line:#e5e8f3;
+    --accent:#4f46e5;
+    --accent2:#7c3aed;
+    --phon:#0d9488;
+    --shadow:0 10px 40px rgba(23,31,66,.09);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+    background:
+      radial-gradient(1100px 520px at 8% -12%, #dfe7ff 0%, transparent 62%),
+      radial-gradient(900px 520px at 102% -4%, #f0e8ff 0%, transparent 58%),
+      var(--bg);
+    color:var(--ink);
+    min-height:100vh;
+    padding:32px 16px 64px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .app{max-width:980px;margin:0 auto}
+
+  header{text-align:center;margin-bottom:26px}
+  h1{
+    margin:0 0 10px;
+    font-size:clamp(26px,4.4vw,38px);
+    letter-spacing:-.8px;font-weight:800;
+    background:linear-gradient(102deg,var(--accent),var(--accent2));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .sub{margin:0 auto;max-width:600px;color:var(--muted);font-size:15px;line-height:1.6}
+
+  .searchbar{
+    display:flex;gap:10px;margin:24px 0 12px;
+    background:var(--card);padding:8px;border-radius:16px;
+    box-shadow:var(--shadow);border:1px solid var(--line);
+    transition:box-shadow .2s;
+  }
+  .searchbar:focus-within{box-shadow:0 10px 40px rgba(79,70,229,.16)}
+  #q{
+    flex:1;border:0;outline:0;background:transparent;
+    font-size:17px;padding:13px 15px;color:var(--ink);min-width:0;font-family:inherit;
+  }
+  #q::placeholder{color:#a6acc4}
+  #btn{
+    border:0;cursor:pointer;border-radius:12px;padding:0 26px;
+    font-size:15px;font-weight:700;color:#fff;font-family:inherit;
+    background:linear-gradient(102deg,var(--accent),var(--accent2));
+    transition:opacity .15s, transform .12s;white-space:nowrap;
+  }
+  #btn:hover{opacity:.92}
+  #btn:active{transform:scale(.975)}
+  #btn:disabled{opacity:.5;cursor:default}
+
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;justify-content:center}
+  .chip{
+    border:1px solid var(--line);background:#fff;color:var(--muted);
+    padding:7px 14px;border-radius:999px;font-size:13px;cursor:pointer;
+    transition:.15s;font-family:inherit;
+  }
+  .chip:hover{border-color:#c4cbf0;color:var(--accent);background:#f8f9ff;transform:translateY(-1px)}
+
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:18px;
+    box-shadow:var(--shadow);overflow:hidden;
+  }
+
+  .results-head{
+    display:grid;grid-template-columns:180px 1fr 1fr;
+    padding:14px 20px;background:#fafbff;border-bottom:1px solid var(--line);
+    font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;
+    color:var(--muted);font-weight:800;
+  }
+
+  .row{
+    display:grid;grid-template-columns:180px 1fr 1fr;
+    align-items:center;border-bottom:1px solid var(--line);
+    transition:background .15s;
+  }
+  .row:last-child{border-bottom:0}
+  .row:hover{background:#fbfcff}
+
+  .cell{padding:16px 20px;font-size:16px;line-height:1.45;min-width:0}
+  .langcell{display:flex;align-items:center;gap:10px;font-weight:700;font-size:14.5px;white-space:nowrap}
+  .flag{font-size:19px;line-height:1}
+
+  .transcell{display:flex;align-items:center;gap:4px;flex-wrap:wrap;font-size:17px;word-break:break-word}
+  .trans-text{flex:1;min-width:0}
+
+  .phoncell{
+    color:var(--phon);font-weight:700;letter-spacing:.2px;
+    font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    font-size:14.5px;word-break:break-word;
+  }
+  .phoncell.na{color:#b9bfd4;font-weight:400;font-family:inherit}
+
+  .iconbtn{
+    border:0;background:transparent;cursor:pointer;font-size:15px;
+    opacity:.3;padding:5px 6px;border-radius:8px;transition:.15s;line-height:1;flex:none;
+  }
+  .iconbtn:hover{opacity:1;background:#eef0fb}
+  .iconbtn.copied{opacity:1;color:#059669}
+
+  .skel{
+    display:inline-block;height:14px;width:72%;border-radius:6px;
+    background:linear-gradient(90deg,#eef0f7 25%,#e2e6f4 50%,#eef0f7 75%);
+    background-size:200% 100%;animation:sh 1.2s infinite ease-in-out;
+  }
+  @keyframes sh{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+  .status{margin-top:18px;font-size:13px;color:var(--muted);text-align:center;min-height:20px;line-height:1.5}
+  .status.err{color:#b91c1c}
+  .status.ok{color:#0d9488}
+
+  footer.note{margin-top:28px;color:var(--muted);font-size:12.5px;line-height:1.7;text-align:center}
+  footer.note code{
+    background:#fff;border:1px solid var(--line);border-radius:6px;
+    padding:1px 6px;font-size:12px;color:var(--accent);
+  }
+
+  @media (max-width:720px){
+    .results-head{display:none}
+    .row{grid-template-columns:1fr;gap:2px;padding:14px 16px}
+    .cell{padding:2px 0}
+    .langcell{margin-bottom:6px}
+    .transcell{font-size:18px}
+    .phoncell{font-size:13.5px}
+    .phoncell::before{
+      content:"say: ";color:#b9bfd4;font-family:inherit;font-weight:600;
+      font-size:11px;letter-spacing:.05em;text-transform:uppercase;
+    }
+    .phoncell.na::before{content:""}
+    #btn{padding:0 18px}
+    .searchbar{border-radius:14px}
+  }
 </style>
 </head>
 <body>
-<div class="wrap">
-<header><h1>Say It Anywhere</h1><p class="sub">Translate an English word or short phrase into 8 languages, then see an English-readable pronunciation and hear it aloud.</p></header>
-<div class="search"><input id="q" value="hello" autocomplete="off" spellcheck="false" placeholder="Try: hello · thank you · where is the bathroom"><button class="primary" id="go">Translate</button></div>
-<div class="chips" id="chips"></div>
-<section class="panel">
-<div class="topbar"><span><strong>8 languages</strong> · English is kept as the original</span><div class="legend"><span class="dot"><i></i> English-readable pronunciation</span><span>🔊 browser audio</span></div></div>
-<table><thead><tr><th style="width:19%">Language</th><th style="width:39%">Translation</th><th>English-readable pronunciation</th></tr></thead><tbody id="rows"></tbody></table>
-</section>
-<div class="status" id="status"></div>
-<p class="note"><strong>Pronunciations are teaching aids, not IPA.</strong> They are designed to give an English speaker a useful approximation. For Japanese, Russian, and Mandarin, the app also obtains romanization when available. Audio uses your browser's built-in speech synthesis, so no paid voice service is required.</p>
+<div class="app">
+
+  <header>
+    <h1>Say It Anywhere</h1>
+    <p class="sub">Type an English word or short phrase — get it in 8 languages, with pronunciations written the way an English speaker would actually read them aloud.</p>
+  </header>
+
+  <div class="searchbar">
+    <input id="q" type="text" placeholder="e.g. hello · thank you · where is the bathroom"
+           autocomplete="off" autocapitalize="off" spellcheck="false" value="hello">
+    <button id="btn" type="button">Translate</button>
+  </div>
+
+  <div class="chips" id="chips"></div>
+
+  <div class="card">
+    <div class="results-head">
+      <div>Language</div>
+      <div>Translation</div>
+      <div>English-Readable Phonetic</div>
+    </div>
+    <div id="rows"></div>
+  </div>
+
+  <div class="status" id="status"></div>
+
+  <footer class="note">
+    Pronunciations are <strong>plain English respellings</strong>, not IPA —
+    <code>你好 → nee how</code> · <code>ありがとう → ah-ree-gah-toh</code> · <code>спасибо → spah-see-boh</code><br>
+    Tap 🔊 to hear any row spoken aloud.
+  </footer>
 </div>
+
 <script>
-'use strict';
-const LANGS=[
- {code:'en',label:'English',flag:'🇺🇸',speech:'en-US'},
- {code:'es',label:'Spanish',flag:'🇪🇸',speech:'es-ES'},
- {code:'it',label:'Italian',flag:'🇮🇹',speech:'it-IT'},
- {code:'fr',label:'French',flag:'🇫🇷',speech:'fr-FR'},
- {code:'de',label:'German',flag:'🇩🇪',speech:'de-DE'},
- {code:'ja',label:'Japanese',flag:'🇯🇵',speech:'ja-JP'},
- {code:'ru',label:'Russian',flag:'🇷🇺',speech:'ru-RU'},
- {code:'zh-CN',label:'Mandarin Chinese',flag:'🇨🇳',speech:'zh-CN'}
+"use strict";
+
+/* ═══════════════════════════════════════════════════════════════
+   1.  LANGUAGES
+   ═══════════════════════════════════════════════════════════════ */
+const LANGS = [
+  { code:'en',    label:'English',          flag:'🇬🇧', speech:'en-US' },
+  { code:'es',    label:'Spanish',          flag:'🇪🇸', speech:'es-ES' },
+  { code:'it',    label:'Italian',          flag:'🇮🇹', speech:'it-IT' },
+  { code:'fr',    label:'French',           flag:'🇫🇷', speech:'fr-FR' },
+  { code:'de',    label:'German',           flag:'🇩🇪', speech:'de-DE' },
+  { code:'ja',    label:'Japanese',         flag:'🇯🇵', speech:'ja-JP' },
+  { code:'ru',    label:'Russian',          flag:'🇷🇺', speech:'ru-RU' },
+  { code:'zh-CN', label:'Mandarin Chinese', flag:'🇨🇳', speech:'zh-CN' }
 ];
-const EXAMPLES=['hello','thank you','good morning','I love you','where is the bathroom','please','goodbye','how are you'];
-const $=id=>document.getElementById(id),q=$('q'),go=$('go'),rows=$('rows'),status=$('status'),chips=$('chips');
-const cache=new Map();let busy=false,timer=null;
-const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-// ---------- free translation ----------
-const GOOGLE='https://translate.googleapis.com/translate_a/single';
-const MYMEMORY='https://api.mymemory.translated.net/get';
+/* ═══════════════════════════════════════════════════════════════
+   2.  PHONETIC ENGINE — shared utilities
+   ═══════════════════════════════════════════════════════════════ */
 
-async function fetchJSON(url,ms=12000){
- const ctl=new AbortController();
- const t=setTimeout(()=>ctl.abort(),ms);
- try{
-  const r=await fetch(url,{signal:ctl.signal});
-  if(!r.ok)throw Error('HTTP '+r.status);
-  return await r.json()
- }finally{clearTimeout(t)}
+/* Vowel "sound units" — used to find syllable boundaries. */
+const VOWEL_UNITS = new Set([
+  'yahng','wahng','eeng','ahng','uhng','wuhn','wahn','yow','yoh','yoo',
+  'yah','yeh','yen','een','yong','ahn','ohn','anh','ong','oon','uhn',
+  'ewn','ew','ow','oy','ay','eye','why','way',
+  'ah','oh','ee','oo','eh','uh','ih','ar','er','aw',
+  'ye','wee','wah','weh','woh','wuh','a','o','y'
+]);
+
+/* Consonant digraphs — treated as one sound unit. */
+const CONSONANT_UNITS = [
+  'shch','tch','dzh','zh','sh','ch','kh','ts','dz','th','ny','ly',
+  'ng','kw','gw','ph','wh'
+];
+
+const ALL_UNITS = [...VOWEL_UNITS, ...CONSONANT_UNITS].sort((a,b) => b.length - a.length);
+
+/* Placeholder helper — protects inserted output from later regex passes. */
+function mkProt() {
+  const store = [];
+  return {
+    ph(str) { store.push(str); return String.fromCharCode(0xE000 + store.length - 1); },
+    out(str) {
+      return str.replace(/[\uE000-\uF8FF]/g, c => {
+        const i = c.charCodeAt(0) - 0xE000;
+        return store[i] !== undefined ? store[i] : '';
+      });
+    }
+  };
 }
 
-async function googleTranslate(text,to){
- const u=GOOGLE+'?client=gtx&sl=en&tl='+encodeURIComponent(to)+'&dt=t&q='+encodeURIComponent(text);
- const d=await fetchJSON(u);
- if(!Array.isArray(d?.[0]))throw Error('bad Google response');
- const out=d[0].map(x=>typeof x?.[0]==='string'?x[0]:'').join('').trim();
- if(!out)throw Error('empty translation');
- return out
-}
-
-async function myMemory(text,to){
- const u=MYMEMORY+'?q='+encodeURIComponent(text)+'&langpair=en%7C'+encodeURIComponent(to);
- const d=await fetchJSON(u);
- const out=d?.responseData?.translatedText;
- if(!out)throw Error('empty MyMemory response');
- return String(out).trim()
-}
-
-async function translate(text,to){
- const key='tr|en>'+to+'|'+text;
- if(cache.has(key))return cache.get(key);
- let out;
- try{out=await myMemory(text,to)}
- catch(e){out=await googleTranslate(text,to)}
- cache.set(key,out);
- return out
-}
-
-async function romanize(text,lang){
- const key='rm|'+lang+'|'+text;
- if(cache.has(key))return cache.get(key);
- let out='';
- try{
-  const u=GOOGLE+'?client=gtx&sl='+encodeURIComponent(lang)+'&tl='+encodeURIComponent(lang)+'&dt=rm&q='+encodeURIComponent(text);
-  const d=await fetchJSON(u);
-  const all=[];
-  (function walk(x){
-   if(typeof x==='string')all.push(x);
-   else if(Array.isArray(x))x.forEach(walk)
-  })(d);
-  const candidates=all.filter(s=>s&&s.trim()!==text.trim()&&/[A-Za-z]/.test(s)&&!/[一-龥ぁ-ヿЀ-ӿ]/.test(s)&&!/^[a-z]{2}(-[A-Za-z]{2,4})?$/.test(s.trim())).sort((a,b)=>b.length-a.length);
-  out=candidates[0]||''
- }catch(e){}
- cache.set(key,out);
- return out
-}
-
-// ---------- phonetic utilities ----------
-function words(t,fn){
- return t.split(/(\s+)/).map(x=>/^\s+$/.test(x)?x:fn(x)).join('')
-}
-
-function prot(){
- const a=[];
- return{
-  p:x=>{a.push(x);return '\uE000'+(a.length-1)+'\uE001'},
-  u:s=>s.replace(/\uE000(\d+)\uE001/g,(_,i)=>a[+i]??'')
- }
-}
-
-function cleanWord(w,re){return w.toLowerCase().replace(re,'')}
-
-// English
-function enWord(w){
- let s=cleanWord(w,/[^a-z']/g);
- if(!s)return '';
- const p=prot();
- const special={one:'wun',two:'too',three:'three',you:'yoo',are:'ar',the:'thuh',a:'uh',an:'uhn',of:'uhv',to:'too',and:'and',for:'for',hello:'heh-loh',goodbye:'good-bye',please:'pleez',thanks:'thanks',thank:'thank'};
- if(special[s])return special[s];
- s=s.replace(/tion\b/g,p.p('shun')).replace(/sion\b/g,p.p('zhun')).replace(/ture\b/g,p.p('cher')).replace(/ph/g,p.p('f')).replace(/gh(?=[aeiou])/g,'g').replace(/kn/g,p.p('n')).replace(/wr/g,p.p('r')).replace(/qu/g,p.p('kw')).replace(/ck/g,'k').replace(/ee|ea/g,p.p('ee')).replace(/oo/g,p.p('oo')).replace(/igh/g,p.p('eye')).replace(/oa/g,p.p('oh')).replace(/ai|ay/g,p.p('ay')).replace(/ou/g,p.p('ow'));
- if(/e$/.test(s)&&s.length>2)s=s.slice(0,-1);
- s=s.replace(/([a-z])\1/g,'$1');
- s=s.replace(/[aeiou]/g,c=>({a:'ah',e:'eh',i:'ih',o:'oh',u:'uh'}[c]));
- return p.u(s)
-}
-const phonEn=t=>words(t,enWord);
-
-// Spanish
-function esWord(w){
- let s=cleanWord(w,/[^a-záéíóúüñ]/g);
- if(!s)return '';
- const p=prot();
- const special={hola:'oh-lah',gracias:'grah-see-ahs',adios:'ah-dee-ohs',adiós:'ah-dee-ohs',por:'por',favor:'fah-bor',sí:'see',si:'see',buenos:'bweh-nohs',días:'dee-ahs',dias:'dee-ahs',cómo:'koh-moh',como:'koh-moh',dónde:'dohn-deh',donde:'dohn-deh'};
- if(special[s])return special[s];
- s=s.replace(/ch/g,p.p('ch')).replace(/qu/g,'k').replace(/gu([ei])/g,(_,v)=>p.p('g')+v).replace(/gü/g,p.p('gw')).replace(/c([ei])/g,(_,v)=>p.p('s')+v).replace(/c/g,'k').replace(/g([ei])/g,(_,v)=>p.p('h')+v).replace(/h/g,'').replace(/ll/g,p.p('y')).replace(/ñ/g,p.p('ny')).replace(/j/g,p.p('h')).replace(/z/g,'s').replace(/v/g,'b').replace(/rr/g,'r');
- s=s.replace(/á/g,'a').replace(/é/g,'e').replace(/í/g,'i').replace(/ó/g,'o').replace(/ú/g,'u');
- s=s.replace(/ai/g,p.p('eye')).replace(/ei/g,p.p('ay')).replace(/oi/g,p.p('oy')).replace(/au/g,p.p('ow')).replace(/ia/g,p.p('yah')).replace(/ie/g,p.p('yeh')).replace(/io/g,p.p('yoh')).replace(/iu/g,p.p('yoo')).replace(/ua/g,p.p('wah')).replace(/ue/g,p.p('weh')).replace(/ui/g,p.p('wee'));
- s=s.replace(/[aeiou]/g,c=>({a:'ah',e:'eh',i:'ee',o:'oh',u:'oo'}[c]));
- return p.u(s)
-}
-const phonEs=t=>words(t,esWord);
-
-// Italian
-function itWord(w){
- let s=cleanWord(w,/[^a-zàèéìíòóù]/g);
- if(!s)return '';
- const p=prot();
- const special={ciao:'chow',grazie:'grah-tsee-eh',buongiorno:'bwohn-jor-noh',prego:'pray-goh',scusa:'skoo-zah'};
- if(special[s])return special[s];
- s=s.replace(/gli/g,p.p('ly')).replace(/gn/g,p.p('ny')).replace(/sc([ei])/g,(_,v)=>p.p('sh')+v).replace(/ch/g,p.p('k')).replace(/gh/g,p.p('g')).replace(/ci([aou])/g,(_,v)=>p.p('ch')+v).replace(/gi([aou])/g,(_,v)=>p.p('j')+v).replace(/c([ei])/g,(_,v)=>p.p('ch')+v).replace(/g([ei])/g,(_,v)=>p.p('j')+v).replace(/c/g,'k').replace(/h/g,'').replace(/z/g,p.p('ts')).replace(/ss/g,'s');
- s=s.replace(/[àá]/g,'a').replace(/[èé]/g,'e').replace(/[ìí]/g,'i').replace(/[òó]/g,'o').replace(/[ùú]/g,'u');
- s=s.replace(/ai/g,p.p('eye')).replace(/ei/g,p.p('ay')).replace(/oi/g,p.p('oy')).replace(/au/g,p.p('ow')).replace(/ia/g,p.p('yah')).replace(/ie/g,p.p('yeh')).replace(/io/g,p.p('yoh')).replace(/iu/g,p.p('yoo')).replace(/ua/g,p.p('wah')).replace(/ue/g,p.p('weh')).replace(/ui/g,p.p('wee'));
- s=s.replace(/[aeiou]/g,c=>({a:'ah',e:'eh',i:'ee',o:'oh',u:'oo'}[c]));
- return p.u(s)
-}
-const phonIt=t=>words(t,itWord);
-
-// French
-function frWord(w){
- let s=cleanWord(w,/[^a-zàâäéèêëîïôöùûüÿœç'-]/g);
- if(!s)return '';
- const p=prot();
- const special={bonjour:'bohn-zhoor',merci:'mehr-see',oui:'wee',non:'nohn',salut:'sah-loo',français:'frahn-say',francais:'frahn-say'};
- if(special[s])return special[s];
- s=s.replace(/œ/g,p.p('uh')).replace(/é/g,p.p('ay')).replace(/[èêë]/g,p.p('eh')).replace(/[àâä]/g,'a').replace(/[îï]/g,'i').replace(/[ôö]/g,'o').replace(/[ùûü]/g,'u').replace(/ÿ/g,'i').replace(/ç/g,'s');
- s=s.replace(/eau/g,p.p('oh')).replace(/au/g,p.p('oh')).replace(/eu/g,p.p('uh')).replace(/ou/g,p.p('oo')).replace(/oi/g,p.p('wah')).replace(/ai|ei/g,p.p('ay'));
- s=s.replace(/ain|ein|in|im(?=[^aeiou]|$)/g,p.p('anh')).replace(/an|am|en|em(?=[^aeiou]|$)/g,p.p('ahn')).replace(/on|om(?=[^aeiou]|$)/g,p.p('ohn'));
- s=s.replace(/ch/g,p.p('sh')).replace(/gn/g,p.p('ny')).replace(/qu/g,'k').replace(/ph/g,'f').replace(/j/g,p.p('zh')).replace(/g([eiy])/g,(_,v)=>p.p('zh')+v).replace(/c([eiy])/g,(_,v)=>p.p('s')+v).replace(/c/g,'k').replace(/h/g,'');
- if(/[^aeiou]e$/.test(s)&&s.length>3)s=s.slice(0,-1);
- s=s.replace(/[aeiou]/g,c=>({a:'ah',e:'uh',i:'ee',o:'oh',u:'ew'}[c]));
- if(s.length>3)s=s.replace(/[tdsxzp]$/,'');
- return p.u(s)
-}
-const phonFr=t=>words(t,frWord);
-
-// German
-function deWord(w){
- let s=cleanWord(w,/[^a-zäöüß'-]/g);
- if(!s)return '';
- const p=prot();
- const special={hallo:'hah-loh',danke:'dahn-kuh',bitte:'bit-tuh',tschüss:'chooss',tschuss:'chooss',guten:'goo-ten',morgen:'mor-gen',ja:'yah',nein:'nine'};
- if(special[s])return special[s];
- s=s.replace(/tsch/g,p.p('ch')).replace(/sch/g,p.p('sh')).replace(/^sp/g,p.p('sh')+'p').replace(/^st/g,p.p('sh')+'t').replace(/ch/g,p.p('kh')).replace(/ck/g,'k').replace(/tz/g,p.p('ts')).replace(/z/g,p.p('ts')).replace(/ß/g,'s').replace(/w/g,'v').replace(/v/g,'f').replace(/s([aeiouäöü])/g,(_,v)=>p.p('z')+v);
- s=s.replace(/eu|äu/g,p.p('oy')).replace(/ei|ai/g,p.p('eye')).replace(/ie/g,p.p('ee')).replace(/au/g,p.p('ow')).replace(/ä/g,p.p('eh')).replace(/ö/g,p.p('uh')).replace(/ü/g,p.p('ew'));
- s=s.replace(/er$/g,p.p('uh')).replace(/en$/g,p.p('uhn')).replace(/e$/g,p.p('uh'));
- s=s.replace(/[aeiou]/g,c=>({a:'ah',e:'eh',i:'ee',o:'oh',u:'oo'}[c]));
- s=s.replace(/j/g,'y').replace(/([bcdfghjklmnpqrstvwxyz])\1/g,'$1');
- return p.u(s)
-}
-const phonDe=t=>words(t,deWord);
-
-// Japanese
-const KANA={'きゃ':'kya','きゅ':'kyu','きょ':'kyo','しゃ':'sha','しゅ':'shu','しょ':'sho','ちゃ':'cha','ちゅ':'chu','ちょ':'cho','にゃ':'nya','にゅ':'nyu','にょ':'nyo','ひゃ':'hya','ひゅ':'hyu','ひょ':'hyo','みゃ':'mya','みゅ':'myu','みょ':'myo','りゃ':'rya','りゅ':'ryu','りょ':'ryo','ぎゃ':'gya','ぎゅ':'gyu','ぎょ':'gyo','じゃ':'ja','じゅ':'ju','じょ':'jo','びゃ':'bya','びゅ':'byu','びょ':'byo','ぴゃ':'pya','ぴゅ':'pyu','ぴょ':'pyo','あ':'a','い':'i','う':'u','え':'e','お':'o','か':'ka','き':'ki','く':'ku','け':'ke','こ':'ko','さ':'sa','し':'shi','す':'su','せ':'se','そ':'so','た':'ta','ち':'chi','つ':'tsu','て':'te','と':'to','な':'na','に':'ni','ぬ':'nu','ね':'ne','の':'no','は':'ha','ひ':'hi','ふ':'fu','へ':'he','ほ':'ho','ま':'ma','み':'mi','む':'mu','め':'me','も':'mo','や':'ya','ゆ':'yu','よ':'yo','ら':'ra','り':'ri','る':'ru','れ':'re','ろ':'ro','わ':'wa','を':'wo','ん':'n','が':'ga','ぎ':'gi','ぐ':'gu','げ':'ge','ご':'go','ざ':'za','じ':'ji','ず':'zu','ぜ':'ze','ぞ':'zo','だ':'da','ぢ':'ji','づ':'zu','で':'de','ど':'do','ば':'ba','び':'bi','ぶ':'bu','べ':'be','ぼ':'bo','ぱ':'pa','ぴ':'pi','ぷ':'pu','ぺ':'pe','ぽ':'po','ぁ':'a','ぃ':'i','ぅ':'u','ぇ':'e','ぉ':'o'};
-
-function kanaRomaji(t){
- let s=t.replace(/[\u30A1-\u30F6]/g,c=>String.fromCharCode(c.charCodeAt(0)-0x60)),o='';
- for(let i=0;i<s.length;i++){
-  if(s[i]==='ー')continue;
-  const two=s.slice(i,i+2);
-  if(KANA[two]){o+=KANA[two];i++;continue}
-  if(s[i]==='っ'){const n=s[i+1];if(n)o+=n;continue}
-  o+=KANA[s[i]]||s[i]
- }
- return o
-}
-
-function jaPhon(r){
- let s=r.toLowerCase().replace(/[^a-z\s'-]/g,'').replace(/ou/g,'o').replace(/oo/g,'o').replace(/uu/g,'u').replace(/aa/g,'a').replace(/ee/g,'e');
- const map={a:'ah',i:'ee',u:'oo',e:'eh',o:'oh',shi:'shee',chi:'chee',tsu:'tsoo',fu:'foo',ji:'jee',rya:'ryah',ryu:'ryoo',ryo:'ryoh'};
- return s.split(/\s+/).filter(Boolean).map(x=>{
-  for(const k of ['shi','chi','tsu','rya','ryu','ryo'])x=x.replaceAll(k,map[k]);
-  return x.replace(/([bcdfghjklmnpqrstvwxyz])([aiueo])/g,(_,c,v)=>c+map[v])
- }).join(' ')
-}
-
-// Russian
-const CYR={'а':'a','б':'b','в':'v','г':'g','д':'d','е':'ye','ё':'yo','ж':'zh','з':'z','и':'ee','й':'y','к':'k','л':'l','м':'m','н':'n','о':'oh','п':'p','р':'r','с':'s','т':'t','у':'oo','ф':'f','х':'kh','ц':'ts','ч':'ch','ш':'sh','щ':'shch','ъ':'','ы':'ih','ь':'','э':'eh','ю':'yoo','я':'yah'};
-
-function ruLocal(t){
- return words(t,w=>{
-  let s=w.toLowerCase();
-  return s.split('').map(c=>CYR[c]??c).join('')
- })
-}
-
-function ruPhon(l){
- return l.replace(/shch/g,'shch').replace(/zh/g,'zh').replace(/kh/g,'kh').replace(/ts/g,'ts').replace(/ch/g,'ch').replace(/sh/g,'sh').replace(/yoo/g,'yoo').replace(/yo/g,'yoh').replace(/yah/g,'yah').replace(/ye/g,'yeh').replace(/ee/g,'ee').replace(/oo/g,'oo').replace(/ih/g,'ih')
-}
-
-// Mandarin
-const SPECIAL_PINYIN={yi:'ee',ya:'yah',ye:'yeh',yao:'yow',you:'yoh',yan:'yen',yin:'yeen',yang:'yahng',ying:'eeng',yong:'yong',yu:'ew',yue:'weh',yuan:'ywen',yun:'yewn',wu:'oo',wa:'wah',wo:'woh',wai:'why',wei:'way',wan:'wahn',wen:'wuhn',wang:'wahng',weng:'wuhng'};
-const INIT=['zh','ch','sh','b','p','m','f','d','t','n','l','g','k','h','j','q','x','r','z','c','s'];
-const FIN={a:'ah',o:'oh',e:'uh',ai:'eye',ei:'ay',ao:'ow',ou:'oh',er:'ar',an:'ahn',en:'uhn',ang:'ahng',eng:'uhng',ong:'ong',i:'ee',ia:'yah',ie:'yeh',iao:'yow',iu:'yoh',ian:'yen',in:'een',iang:'yahng',ing:'eeng',iong:'yong',u:'oo',ua:'wah',uo:'woh',uai:'why',ui:'way',uan:'wahn',un:'oon',uang:'wahng',ueng:'wuhng',v:'ew',ve:'weh',van:'wahn',vn:'yewn'};
-const IM={b:'b',p:'p',m:'m',f:'f',d:'d',t:'t',n:'n',l:'l',g:'g',k:'k',h:'h',j:'j',q:'ch',x:'sh',zh:'j',ch:'ch',sh:'sh',r:'r',z:'dz',c:'ts',s:'s'};
-
-function pinSyl(s){
- if(SPECIAL_PINYIN[s])return SPECIAL_PINYIN[s];
- let ini='',fin=s;
- for(const i of INIT){
-  if(s.startsWith(i)){ini=i;fin=s.slice(i.length);break}
- }
- if(!fin)fin='i';
- if('jqx'.includes(ini)&&fin[0]==='u')fin='v'+fin.slice(1);
- let f=FIN[fin]||FIN[fin[0]]||fin;
- if(fin==='i'&&['zh','ch','sh','r','z','c','s'].includes(ini))f='ih';
- return (IM[ini]||'')+f
-}
-
-function zhPhon(p){
- if(!p)return '';
- const s=p.replace(/[üÜ]/g,'v').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
- return s.split(/[\s']+/).filter(x=>/[a-z]/.test(x)).map(x=>pinSyl(x.replace(/[^a-z]/g,''))).join(' ')
-}
-
-async function phonetic(L,tr){
- switch(L.code){
-  case'en':return phonEn(tr);
-  case'es':return phonEs(tr);
-  case'it':return phonIt(tr);
-  case'fr':return phonFr(tr);
-  case'de':return phonDe(tr);
-  case'ja':{
-   let r=await romanize(tr,'ja');
-   if(!r||!/^[a-zA-Z\s'’-]+$/.test(r))r=kanaRomaji(tr);
-   return jaPhon(r)
+function tokenize(str) {
+  const out = [];
+  let i = 0;
+  while (i < str.length) {
+    let hit = null;
+    for (const u of ALL_UNITS) { if (str.startsWith(u, i)) { hit = u; break; } }
+    if (hit) { out.push(hit); i += hit.length; }
+    else { out.push(str[i]); i++; }
   }
-  case'ru':{
-   let r=await romanize(tr,'ru');
-   if(!r)r=ruLocal(tr);
-   return ruPhon(r)
+  return out;
+}
+
+/**
+ * Break a phonetic string into readable syllables.
+ * Rule: when a new vowel starts, all consonants between the two vowels
+ * stay in the first syllable except the last one, which starts the next.
+ */
+function syllabify(phon) {
+  if (!phon) return '';
+  const units = tokenize(phon);
+  const isV = u => VOWEL_UNITS.has(u);
+  const syls = [];
+  let cur = [], hasV = false;
+
+  for (const u of units) {
+    if (isV(u)) {
+      if (hasV) {
+        const pending = [];
+        while (cur.length && !isV(cur[cur.length - 1])) pending.unshift(cur.pop());
+        const keep = pending.slice(0, -1);
+        const move = pending.slice(-1);
+        syls.push(cur.concat(keep).join(''));
+        cur = move;
+      }
+      cur.push(u);
+      hasV = true;
+    } else {
+      cur.push(u);
+    }
   }
-  case'zh-CN':{
-   let p=await romanize(tr,'zh-CN');
-   return zhPhon(p)
+  if (cur.length) syls.push(cur.join(''));
+  return syls.filter(Boolean).join('-');
+}
+
+function mapWords(text, fn) {
+  return text.split(/\s+/).map(fn).filter(Boolean).join(' ');
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   3.  ENGLISH
+   ═══════════════════════════════════════════════════════════════ */
+const EN_SPECIAL = {
+  i:'eye', a:'uh', an:'uhn', the:'thuh', to:'too', two:'too', too:'too',
+  one:'wuhn', of:'uhv', was:'wuhz', were:'wuhr', are:'ar', who:'hoo',
+  what:'wuht', where:'wair', there:'thair', their:'thair', here:'heer',
+  your:'yoor', you:'yoo', do:'doo', does:'duhz', done:'duhn',
+  said:'sed', says:'sez', have:'hav', has:'haz', is:'iz', be:'bee',
+  been:'bin', my:'my', by:'by', buy:'by', bye:'by', why:'wy',
+  try:'try', fly:'fly', sky:'sky', cry:'cry', dry:'dry', shy:'shy',
+  spy:'spy', guy:'gy', hi:'hy', ok:'oh-kay', okay:'oh-kay',
+  yes:'yehss', no:'noh', eye:'eye', type:'typ', style:'styl'
+};
+
+function phonEnWord(w) {
+  const p = mkProt();
+  let s = w.toLowerCase().replace(/[^a-z']/g, '');
+  if (!s) return '';
+  if (EN_SPECIAL[s]) return EN_SPECIAL[s];
+
+  s = s.replace(/ck/g, 'k').replace(/ph/g, 'f').replace(/kn/g, 'n').replace(/wr/g, 'r');
+  s = s.replace(/tion\b/g, p.ph('shun')).replace(/sion\b/g, p.ph('zhun'));
+
+  /* magic-e: a_e→ay, i_e→y, o_e→oh, u_e→yoo, e_e→ee */
+  s = s.replace(/([aeiou])([bcdfghjklmnpqrstvwxyz])e\b/g, (m, v, c) => {
+    const long = { a:'ay', e:'ee', i:'y', o:'oh', u:'yoo' }[v];
+    return p.ph(long) + c;
+  });
+
+  /* vowel teams */
+  s = s.replace(/ee|ea/g, p.ph('ee'));
+  s = s.replace(/oo/g, p.ph('oo'));
+  s = s.replace(/ou|ow/g, p.ph('ow'));
+  s = s.replace(/ai|ay/g, p.ph('ay'));
+  s = s.replace(/igh/g, p.ph('y'));
+
+  /* vowel + y endings */
+  s = s.replace(/ay\b/g, p.ph('ay')).replace(/ey\b/g, p.ph('ay'))
+       .replace(/oy\b/g, p.ph('oy')).replace(/uy\b/g, p.ph('y'));
+
+  /* final -y after a consonant → ee */
+  s = s.replace(/([bcdfghjklmnpqrstvwxyz])y\b/g, (m, c) => c + p.ph('ee'));
+
+  /* collapse doubles */
+  s = s.replace(/([bcdfghjklmnpqrstvwxyz])\1/g, '$1');
+
+  /* silent final e */
+  s = s.replace(/e\b/g, '');
+
+  /* short vowels */
+  s = s.replace(/[aeiou]/g, c => ({ a:'a', e:'eh', i:'ih', o:'o', u:'uh' }[c]));
+
+  /* final o is long */
+  s = s.replace(/o\b/g, p.ph('oh'));
+
+  return p.out(s);
+}
+const phonEn = t => mapWords(t, phonEnWord);
+
+/* ═══════════════════════════════════════════════════════════════
+   4.  SPANISH
+   ═══════════════════════════════════════════════════════════════ */
+function phonEsWord(w) {
+  const p = mkProt();
+  let s = w.toLowerCase().replace(/[^a-zñáéíóúü]/g, '');
+  if (!s) return '';
+
+  s = s.replace(/ch/g, p.ph('ch'));
+  s = s.replace(/qu/g, 'k');
+  s = s.replace(/gu([ei])/g, (m, v) => p.ph('g') + v);
+  s = s.replace(/gü/g, p.ph('g') + 'w');
+  s = s.replace(/c([ei])/g, (m, v) => p.ph('s') + v);
+  s = s.replace(/c/g, 'k');
+  s = s.replace(/g([ei])/g, (m, v) => p.ph('h') + v);
+  s = s.replace(/h/g, '');
+  s = s.replace(/ll/g, 'y');
+  s = s.replace(/ñ/g, p.ph('ny'));
+  s = s.replace(/j/g, p.ph('h'));
+  s = s.replace(/z/g, 's');
+  s = s.replace(/v/g, 'b');
+  s = s.replace(/rr/g, 'r');
+  s = s.replace(/á/g,'a').replace(/é/g,'e').replace(/í/g,'i')
+       .replace(/ó/g,'o').replace(/ú/g,'u');
+
+  s = s.replace(/ai/g, p.ph('eye')).replace(/ei/g, p.ph('ay')).replace(/oi/g, p.ph('oy'));
+  s = s.replace(/au/g, p.ph('ow')).replace(/eu/g, p.ph('ay') + p.ph('oo'));
+  s = s.replace(/ia/g, p.ph('yah')).replace(/ie/g, p.ph('yeh'))
+       .replace(/io/g, p.ph('yoh')).replace(/iu/g, p.ph('yoo'));
+  s = s.replace(/ua/g, p.ph('wah')).replace(/ue/g, p.ph('weh'))
+       .replace(/uo/g, p.ph('woh')).replace(/ui/g, p.ph('wee'));
+
+  s = s.replace(/[aeiou]/g, c => ({ a:'ah', e:'eh', i:'ee', o:'oh', u:'oo' }[c]));
+  s = s.replace(/y$/, p.ph('ee'));
+  return p.out(s);
+}
+const phonEs = t => mapWords(t, phonEsWord);
+
+/* ═══════════════════════════════════════════════════════════════
+   5.  ITALIAN
+   ═══════════════════════════════════════════════════════════════ */
+function phonItWord(w) {
+  const p = mkProt();
+  let s = w.toLowerCase().replace(/[^a-zàèéìíòóù]/g, '');
+  if (!s) return '';
+
+  s = s.replace(/gli/g, p.ph('ly'));
+  s = s.replace(/gn/g, p.ph('ny'));
+  s = s.replace(/sc([ei])/g, (m, v) => p.ph('sh') + v);
+  s = s.replace(/ch/g, p.ph('k'));
+  s = s.replace(/gh/g, p.ph('g'));
+  s = s.replace(/ci([aou])/g, (m, v) => p.ph('ch') + v);
+  s = s.replace(/gi([aou])/g, (m, v) => p.ph('j') + v);
+  s = s.replace(/c([ei])/g, (m, v) => p.ph('ch') + v);
+  s = s.replace(/g([ei])/g, (m, v) => p.ph('j') + v);
+  s = s.replace(/c/g, 'k');
+  s = s.replace(/h/g, '');
+  s = s.replace(/z/g, p.ph('ts'));
+  s = s.replace(/ss/g, 's');
+  s = s.replace(/[àá]/g,'a').replace(/[èé]/g,'e').replace(/[ìí]/g,'i')
+       .replace(/[òó]/g,'o').replace(/[ùú]/g,'u');
+
+  s = s.replace(/ai/g, p.ph('eye')).replace(/ei/g, p.ph('ay')).replace(/oi/g, p.ph('oy'));
+  s = s.replace(/au/g, p.ph('ow')).replace(/ao/g, p.ph('ow'));
+  s = s.replace(/ia/g, p.ph('yah')).replace(/ie/g, p.ph('yeh'))
+       .replace(/io/g, p.ph('yoh')).replace(/iu/g, p.ph('yoo'));
+  s = s.replace(/ua/g, p.ph('wah')).replace(/ue/g, p.ph('weh'))
+       .replace(/uo/g, p.ph('woh')).replace(/ui/g, p.ph('wee'));
+
+  s = s.replace(/[aeiou]/g, c => ({ a:'ah', e:'eh', i:'ee', o:'oh', u:'oo' }[c]));
+  return p.out(s);
+}
+const phonIt = t => mapWords(t, phonItWord);
+
+/* ═══════════════════════════════════════════════════════════════
+   6.  FRENCH
+   ═══════════════════════════════════════════════════════════════ */
+function phonFrWord(w) {
+  const p = mkProt();
+  let s = w.toLowerCase().replace(/[^a-zàâäéèêëîïôöùûüÿœç'-]/g, '');
+  if (!s) return '';
+
+  s = s.replace(/œ/g, p.ph('uh'));
+  s = s.replace(/é/g, p.ph('ay'));
+  s = s.replace(/[èêë]/g, p.ph('eh'));
+  s = s.replace(/[àâä]/g,'a').replace(/[îï]/g,'i').replace(/[ôö]/g,'o')
+       .replace(/[ùûü]/g,'u').replace(/ÿ/g,'i').replace(/ç/g,'s');
+
+  if (s.length >= 4 && /[^aeiou]e$/.test(s)) s = s.slice(0, -1);
+  if (s.length > 2) s = s.replace(/[stdxzp]$/, '');
+
+  s = s.replace(/(ain|ein|in|im|un|um)(?![aeiou])/g, p.ph('anh'));
+  s = s.replace(/(an|am|en|em)(?![aeiou])/g, p.ph('ahn'));
+  s = s.replace(/(on|om)(?![aeiou])/g, p.ph('ohn'));
+
+  s = s.replace(/eau/g, p.ph('oh'));
+  s = s.replace(/au/g,  p.ph('oh'));
+  s = s.replace(/eu/g,  p.ph('uh'));
+  s = s.replace(/ou/g,  p.ph('oo'));
+  s = s.replace(/oi/g,  p.ph('wah'));
+  s = s.replace(/ai|ei/g, p.ph('ay'));
+
+  s = s.replace(/ch/g, p.ph('sh'));
+  s = s.replace(/gn/g, p.ph('ny'));
+  s = s.replace(/qu/g, 'k');
+  s = s.replace(/ph/g, 'f');
+  s = s.replace(/j/g,  p.ph('zh'));
+  s = s.replace(/g([eiy])/g, (m, v) => p.ph('zh') + v);
+  s = s.replace(/c([eiy])/g, (m, v) => p.ph('s') + v);
+  s = s.replace(/c/g, 'k');
+  s = s.replace(/h/g, '');
+
+  s = s.replace(/[aeiou]/g, c => ({ a:'ah', e:'uh', i:'ee', o:'oh', u:'ew' }[c]));
+  s = s.replace(/y/g, p.ph('ee'));
+  return p.out(s);
+}
+const phonFr = t => mapWords(t, phonFrWord);
+
+/* ═══════════════════════════════════════════════════════════════
+   7.  GERMAN
+   ═══════════════════════════════════════════════════════════════ */
+function phonDeWord(w) {
+  const p = mkProt();
+  let s = w.toLowerCase().replace(/[^a-zäöüß'-]/g, '');
+  if (!s) return '';
+
+  s = s.replace(/tsch/g, p.ph('ch'));
+  s = s.replace(/sch/g,  p.ph('sh'));
+  s = s.replace(/^sp/g,  p.ph('sh') + 'p');
+  s = s.replace(/^st/g,  p.ph('sh') + 't');
+  s = s.replace(/ch/g,   p.ph('kh'));
+  s = s.replace(/ck/g, 'k');
+  s = s.replace(/tz/g, p.ph('ts'));
+  s = s.replace(/z/g,  p.ph('ts'));
+  s = s.replace(/ß/g, 's');
+  s = s.replace(/w/g, 'v');
+  s = s.replace(/v/g, 'f');
+  s = s.replace(/s([aeiouäöü])/g, (m, v) => p.ph('z') + v);
+
+  s = s.replace(/eu|äu/g, p.ph('oy'));
+  s = s.replace(/ei|ai/g, p.ph('eye'));
+  s = s.replace(/ie/g,    p.ph('ee'));
+  s = s.replace(/au/g,    p.ph('ow'));
+
+  s = s.replace(/ä/g, p.ph('eh'));
+  s = s.replace(/ö/g, p.ph('uh'));
+  s = s.replace(/ü/g, p.ph('ew'));
+
+  s = s.replace(/er$/, p.ph('uh'));
+  s = s.replace(/en$/, p.ph('uhn'));
+  s = s.replace(/e$/,  p.ph('uh'));
+
+  s = s.replace(/[aeiou]/g, c => ({ a:'ah', e:'eh', i:'ee', o:'oh', u:'oo' }[c]));
+  s = s.replace(/j/g, 'y');
+  s = s.replace(/([bcdfghjklmnpqrstvwxyz])\1/g, '$1');
+  return p.out(s);
+}
+const phonDe = t => mapWords(t, phonDeWord);
+
+/* ═══════════════════════════════════════════════════════════════
+   8.  JAPANESE
+   ═══════════════════════════════════════════════════════════════ */
+const KANA = {
+  'きゃ':'kya','きゅ':'kyu','きょ':'kyo','しゃ':'sha','しゅ':'shu','しょ':'sho',
+  'ちゃ':'cha','ちゅ':'chu','ちょ':'cho','にゃ':'nya','にゅ':'nyu','にょ':'nyo',
+  'ひゃ':'hya','ひゅ':'hyu','ひょ':'hyo','みゃ':'mya','みゅ':'myu','みょ':'myo',
+  'りゃ':'rya','りゅ':'ryu','りょ':'ryo','ぎゃ':'gya','ぎゅ':'gyu','ぎょ':'gyo',
+  'じゃ':'ja','じゅ':'ju','じょ':'jo','びゃ':'bya','びゅ':'byu','びょ':'byo',
+  'ぴゃ':'pya','ぴゅ':'pyu','ぴょ':'pyo',
+  'あ':'a','い':'i','う':'u','え':'e','お':'o',
+  'か':'ka','き':'ki','く':'ku','け':'ke','こ':'ko',
+  'さ':'sa','し':'shi','す':'su','せ':'se','そ':'so',
+  'た':'ta','ち':'chi','つ':'tsu','て':'te','と':'to',
+  'な':'na','に':'ni','ぬ':'nu','ね':'ne','の':'no',
+  'は':'ha','ひ':'hi','ふ':'fu','へ':'he','ほ':'ho',
+  'ま':'ma','み':'mi','む':'mu','め':'me','も':'mo',
+  'や':'ya','ゆ':'yu','よ':'yo',
+  'ら':'ra','り':'ri','る':'ru','れ':'re','ろ':'ro',
+  'わ':'wa','を':'wo','ん':'n',
+  'が':'ga','ぎ':'gi','ぐ':'gu','げ':'ge','ご':'go',
+  'ざ':'za','じ':'ji','ず':'zu','ぜ':'ze','ぞ':'zo',
+  'だ':'da','ぢ':'ji','づ':'zu','で':'de','ど':'do',
+  'ば':'ba','び':'bi','ぶ':'bu','べ':'be','ぼ':'bo',
+  'ぱ':'pa','ぴ':'pi','ぷ':'pu','ぺ':'pe','ぽ':'po',
+  'ぁ':'a','ぃ':'i','ぅ':'u','ぇ':'e','ぉ':'o','っ':'','ー':''
+};
+
+function kanaToRomaji(text) {
+  let s = text.replace(/[\u30A1-\u30F6]/g, c => String.fromCharCode(c.charCodeAt(0) - 0x60));
+  let out = '';
+  for (let i = 0; i < s.length; i++) {
+    const two = s.substr(i, 2);
+    if (KANA[two] !== undefined) { out += KANA[two]; i++; continue; }
+    if (KANA[s[i]] !== undefined) { out += KANA[s[i]]; continue; }
   }
- }
- return ''
+  return out;
 }
 
-// UI
-function build(){
- for(const L of LANGS){
-  const tr=document.createElement('tr');
-  tr.dataset.code=L.code;
-  tr.innerHTML='<td><div class="lang"><span class="flag">'+L.flag+'</span><span>'+L.label+'</span></div></td><td class="t"><span class="skel"></span></td><td class="p"><span class="skel"></span></td>';
-  rows.appendChild(tr)
- }
- for(const ex of EXAMPLES){
-  const b=document.createElement('button');
-  b.className='chip';
-  b.textContent=ex;
-  b.onclick=()=>{q.value=ex;run()};
-  chips.appendChild(b)
- }
-}
-
-function loading(){
- for(const tr of rows.rows){
-  tr.querySelector('.t').innerHTML='<span class="skel"></span>';
-  tr.querySelector('.p').innerHTML='<span class="skel"></span>'
- }
-}
-
-function speak(text,lang){
- if(!('speechSynthesis'in window)){
-  alert('Your browser does not provide speech synthesis.');
-  return
- }
- speechSynthesis.cancel();
- const u=new SpeechSynthesisUtterance(text);
- u.lang=lang;
- u.rate=.82;
- speechSynthesis.speak(u)
-}
-
-function setRow(L,tr,ph,error=false){
- const row=rows.querySelector('tr[data-code="'+L.code+'"]');
- const tc=row.querySelector('.t'),pc=row.querySelector('.p');
- if(error){
-  tc.textContent='Unavailable';
-  pc.textContent='Translation service failed';
-  pc.className='p phonetic na';
-  return
- }
- tc.innerHTML='<span class="translation">'+esc(tr)+'</span>';
- const b=document.createElement('button');
- b.className='speak';
- b.title='Hear '+L.label;
- b.textContent='🔊';
- b.onclick=()=>speak(tr,L.speech);
- tc.appendChild(b);
- pc.className='p phonetic';
- pc.textContent=ph||'No readable pronunciation available';
-}
-
-async function run(){
- const text=q.value.trim();
- if(!text)return;
- if(busy)return;
- busy=true;
- go.disabled=true;
- status.className='status';
- status.textContent='Translating…';
- loading();
- let failed=0;
-
- await Promise.all(LANGS.map(async L=>{
-  try{
-   if(L.code==='en'){
-    setRow(L,text,phonEn(text));
-    return
-   }
-   const tr=await translate(text,L.code);
-   const ph=await phonetic(L,tr);
-   setRow(L,tr,ph)
-  }catch(e){
-   failed++;
-   setRow(L,null,null,true)
+function jaSplit(s) {
+  const toks = [];
+  const isC = c => 'bcdfghjklmnpqrstvwxyz'.includes(c);
+  let i = 0;
+  while (i < s.length) {
+    const c = s[i];
+    if (c === 'n' && (i + 1 >= s.length || !'aiueoy'.includes(s[i + 1]))) {
+      toks.push('n'); i++; continue;
+    }
+    if (c !== 'n' && isC(c) && s[i + 1] === c) { toks.push('Q'); i++; continue; }
+    const m = /^([bcdfghjklmnpqrstvwxyz]*)([aiueo])/.exec(s.slice(i));
+    if (m && m[0]) { toks.push(m[0]); i += m[0].length; continue; }
+    toks.push(c); i++;
   }
- }));
-
- busy=false;
- go.disabled=false;
-
- if(failed===0){
-  status.className='status ok';
-  status.textContent='Done — tap 🔊 to hear a translation.'
- }else{
-  status.className='status err';
-  status.textContent='Done with '+failed+' unavailable language'+(failed===1?'':'s')+'. Try again if a service was temporarily blocked.'
- }
+  return toks;
 }
 
-go.onclick=run;
+const JA_VOWEL = { a:'ah', i:'ee', u:'oo', e:'eh', o:'oh' };
 
-q.addEventListener('keydown',e=>{
- if(e.key==='Enter'){
-  clearTimeout(timer);
-  run()
- }
+function jaRomajiToPhonetic(romaji) {
+  if (!romaji) return '';
+  let s = romaji.toLowerCase().replace(/[^a-z]/g, '');
+  if (!s) return '';
+
+  s = s.replace(/ou/g, 'o').replace(/oo/g, 'o')
+       .replace(/uu/g, 'u').replace(/aa/g, 'a').replace(/ee/g, 'e');
+
+  const toks = jaSplit(s);
+  const parts = [];
+
+  for (let i = 0; i < toks.length; i++) {
+    const t = toks[i];
+    if (t === 'Q') continue;
+    if (t === 'n') {
+      const next = toks[i + 1];
+      if (next && next !== 'Q' && next !== 'n' && !/^[aiueo]/.test(next)) continue;
+      parts.push('n');
+      continue;
+    }
+    const m = /^([bcdfghjklmnpqrstvwxyz]*)([aiueo])$/.exec(t);
+    if (!m) { parts.push(t); continue; }
+    parts.push(m[1] + JA_VOWEL[m[2]]);
+  }
+  return syllabify(parts.join(''));
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   9.  RUSSIAN
+   ═══════════════════════════════════════════════════════════════ */
+const CYR = {
+  'а':'a','б':'b','в':'v','г':'g','д':'d','е':'e','ё':'yo','ж':'zh','з':'z',
+  'и':'i','й':'y','к':'k','л':'l','м':'m','н':'n','о':'o','п':'p','р':'r',
+  'с':'s','т':'t','у':'u','ф':'f','х':'kh','ц':'ts','ч':'ch','ш':'sh','щ':'shch',
+  'ъ':'','ы':'y','ь':'','э':'e','ю':'yu','я':'ya'
+};
+
+function cyrillicToLatin(text) {
+  return text.toLowerCase().split('').map(c => (CYR[c] !== undefined ? CYR[c] : c)).join('');
+}
+
+function ruLatinToPhonetic(latin) {
+  const p = mkProt();
+  let s = latin.toLowerCase().replace(/[^a-z']/g, '');
+  if (!s) return '';
+
+  s = s.replace(/shch/g, p.ph('shch'));
+  s = s.replace(/zh/g,   p.ph('zh'));
+  s = s.replace(/kh/g,   p.ph('kh'));
+  s = s.replace(/ts/g,   p.ph('ts'));
+  s = s.replace(/sh/g,   p.ph('sh'));
+  s = s.replace(/ch/g,   p.ph('ch'));
+  s = s.replace(/yo/g,   p.ph('yoh'));
+  s = s.replace(/yu/g,   p.ph('yoo'));
+  s = s.replace(/ya/g,   p.ph('yah'));
+  s = s.replace(/ye/g,   p.ph('yeh'));
+  s = s.replace(/yy/g,   p.ph('ee'));
+
+  s = s.replace(/[aeiouy]/g, c => ({
+    a:'ah', e:'ye', i:'ee', o:'oh', u:'oo', y:'ih'
+  }[c]));
+
+  return p.out(s);
+}
+const ruPhon = t => mapWords(t, w => ruLatinToPhonetic(w));
+
+/* ═══════════════════════════════════════════════════════════════
+   10.  MANDARIN CHINESE
+   ═══════════════════════════════════════════════════════════════ */
+const PINYIN_SPECIAL = {
+  yi:'ee', ya:'yah', ye:'yeh', yao:'yow', you:'yoh', yan:'yen', yin:'een',
+  yang:'yahng', ying:'eeng', yong:'yong', yo:'yoh',
+  yu:'ew', yue:'weh', yuan:'wahn', yun:'ewn',
+  wu:'oo', wa:'wah', wo:'woh', wai:'why', wei:'way',
+  wan:'wahn', wen:'wuhn', wang:'wahng', weng:'wuhng'
+};
+
+const PINYIN_INITIALS = ['zh','ch','sh','b','p','m','f','d','t','n','l',
+                         'g','k','h','j','q','x','r','z','c','s'];
+
+const PINYIN_FINALS = {
+  a:'ah', o:'oh', e:'uh', ai:'eye', ei:'ay', ao:'ow', ou:'oh', er:'ar',
+  an:'ahn', en:'uhn', ang:'ahng', eng:'uhng', ong:'ong',
+  i:'ee', ia:'yah', ie:'yeh', iao:'yow', iu:'yoh', ian:'yen', in:'een',
+  iang:'yahng', ing:'eeng', iong:'yong', io:'yoh',
+  u:'oo', ua:'wah', uo:'woh', uai:'why', ui:'way', uan:'wahn', un:'oon',
+  uang:'wahng', ueng:'wuhng',
+  v:'ew', ve:'weh', van:'wahn', vn:'ewn'
+};
+
+const PINYIN_IMAP = {
+  b:'b', p:'p', m:'m', f:'f', d:'d', t:'t', n:'n', l:'l', g:'g', k:'k',
+  h:'h', j:'j', q:'ch', x:'sh', zh:'j', ch:'ch', sh:'sh', r:'r',
+  z:'dz', c:'ts', s:'s'
+};
+
+const VALID_SYL = (() => {
+  const set = new Set(Object.keys(PINYIN_SPECIAL));
+  const finals = Object.keys(PINYIN_FINALS);
+  for (const ini of ['', ...PINYIN_INITIALS]) {
+    for (const fin of finals) {
+      set.add(ini + fin);
+      if (['j','q','x'].includes(ini) && fin.startsWith('v')) set.add(ini + 'u' + fin.slice(1));
+      if (ini === '') {
+        if (fin.startsWith('i')) set.add('y' + fin.slice(1));
+        if (fin.startsWith('u')) set.add('w' + fin.slice(1));
+      }
+    }
+  }
+  return set;
+})();
+
+function splitPinyinRun(run) {
+  const out = [];
+  let s = run;
+  while (s.length) {
+    let matched = false;
+    for (let len = Math.min(6, s.length); len >= 1; len--) {
+      const cand = s.slice(0, len);
+      if (VALID_SYL.has(cand)) { out.push(cand); s = s.slice(len); matched = true; break; }
+    }
+    if (!matched) { out.push(s[0]); s = s.slice(1); }
+  }
+  return out;
+}
+
+function pinyinSyllable(syl) {
+  if (!syl) return '';
+  if (PINYIN_SPECIAL[syl]) return PINYIN_SPECIAL[syl];
+
+  let ini = '', fin = syl;
+  for (const i of PINYIN_INITIALS) {
+    if (syl.startsWith(i)) { ini = i; fin = syl.slice(i.length); break; }
+  }
+  if (!fin) fin = 'i';
+  if ('jqx'.includes(ini) && fin[0] === 'u') fin = 'v' + fin.slice(1);
+
+  let f = PINYIN_FINALS[fin];
+  if (!f) f = PINYIN_FINALS[fin[0]] || fin;
+  if (fin === 'i' && ['zh','ch','sh','r','z','c','s'].includes(ini)) f = 'ih';
+
+  return (PINYIN_IMAP[ini] || '') + f;
+}
+
+function zhPhonetic(pinyin) {
+  if (!pinyin) return '';
+  const cleaned = pinyin
+    .replace(/[üÜ]/g, 'v')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z\u4e00-\u9fff\s']/g, ' ');
+
+  const out = [];
+  for (const chunk of cleaned.split(/[\s']+/)) {
+    if (!chunk) continue;
+    const latin = chunk.replace(/[^a-z]/g, '');
+    if (!latin) continue;
+    const syls = latin.length > 6 ? splitPinyinRun(latin) : [latin];
+    for (const sy of syls) {
+      const ph = pinyinSyllable(sy);
+      if (ph) out.push(ph);
+    }
+  }
+  return out.join(' ');
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   11.  OFFLINE DICTIONARY  (works with zero internet)
+   ═══════════════════════════════════════════════════════════════ */
+const OFFLINE = {
+  'hello':      { es:'hola', it:'ciao', fr:'bonjour', de:'hallo',
+                  ja:'こんにちは', ro:'konnichiwa', ru:'привет', zh:'你好', py:'nǐ hǎo' },
+  'hi':         { es:'hola', it:'ciao', fr:'salut', de:'hallo',
+                  ja:'やあ', ro:'yaa', ru:'привет', zh:'嗨', py:'hāi' },
+  'goodbye':    { es:'adiós', it:'arrivederci', fr:'au revoir', de:'auf Wiedersehen',
+                  ja:'さようなら', ro:'sayounara', ru:'до свидания', zh:'再见', py:'zài jiàn' },
+  'bye':        { es:'adiós', it:'ciao', fr:'salut', de:'tschüss',
+                  ja:'バイバイ', ro:'baibai', ru:'пока', zh:'拜拜', py:'bái bái' },
+  'thank you':  { es:'gracias', it:'grazie', fr:'merci', de:'danke',
+                  ja:'ありがとう', ro:'arigatou', ru:'спасибо', zh:'谢谢', py:'xiè xie' },
+  'thanks':     { es:'gracias', it:'grazie', fr:'merci', de:'danke',
+                  ja:'ありがとう', ro:'arigatou', ru:'спасибо', zh:'谢谢', py:'xiè xie' },
+  'please':     { es:'por favor', it:'per favore', fr:"s'il vous plaît", de:'bitte',
+                  ja:'お願いします', ro:'onegaishimasu', ru:'пожалуйста', zh:'请', py:'qǐng' },
+  'yes':        { es:'sí', it:'sì', fr:'oui', de:'ja',
+                  ja:'はい', ro:'hai', ru:'да', zh:'是', py:'shì' },
+  'no':         { es:'no', it:'no', fr:'non', de:'nein',
+                  ja:'いいえ', ro:'iie', ru:'нет', zh:'不', py:'bù' },
+  'sorry':      { es:'lo siento', it:'scusa', fr:'désolé', de:'Entschuldigung',
+                  ja:'ごめんなさい', ro:'gomen nasai', ru:'извините', zh:'对不起', py:'duì bu qǐ' },
+  'excuse me':  { es:'perdón', it:'scusi', fr:'excusez-moi', de:'Entschuldigung',
+                  ja:'すみません', ro:'sumimasen', ru:'извините', zh:'不好意思', py:'bù hǎo yì si' },
+  'good morning': { es:'buenos días', it:'buongiorno', fr:'bonjour', de:'guten Morgen',
+                  ja:'おはようございます', ro:'ohayou gozaimasu', ru:'доброе утро', zh:'早上好', py:'zǎo shang hǎo' },
+  'good evening': { es:'buenas tardes', it:'buonasera', fr:'bonsoir', de:'guten Abend',
+                  ja:'こんばんは', ro:'konbanwa', ru:'добрый вечер', zh:'晚上好', py:'wǎn shang hǎo' },
+  'good night': { es:'buenas noches', it:'buonanotte', fr:'bonne nuit', de:'gute Nacht',
+                  ja:'おやすみなさい', ro:'oyasuminasai', ru:'спокойной ночи', zh:'晚安', py:'wǎn ān' },
+  'how are you':{ es:'¿cómo estás?', it:'come stai', fr:'comment ça va', de:'wie geht es dir',
+                  ja:'お元気ですか', ro:'ogenki desu ka', ru:'как дела', zh:'你好吗', py:'nǐ hǎo ma' },
+  'i love you': { es:'te quiero', it:'ti amo', fr:"je t'aime", de:'ich liebe dich',
+                  ja:'愛してる', ro:'aishiteru', ru:'я тебя люблю', zh:'我爱你', py:'wǒ ài nǐ' },
+  'i miss you': { es:'te extraño', it:'mi manchi', fr:'tu me manques', de:'ich vermisse dich',
+                  ja:'会いたい', ro:'aitai', ru:'я скучаю по тебе', zh:'我想你', py:'wǒ xiǎng nǐ' },
+  'cheers':     { es:'salud', it:'cin cin', fr:'santé', de:'prost',
+                  ja:'乾杯', ro:'kanpai', ru:'за здоровье', zh:'干杯', py:'gān bēi' },
+  'welcome':    { es:'bienvenido', it:'benvenuto', fr:'bienvenue', de:'willkommen',
+                  ja:'ようこそ', ro:'youkoso', ru:'добро пожаловать', zh:'欢迎', py:'huān yíng' },
+  'congratulations': { es:'felicidades', it:'congratulazioni', fr:'félicitations',
+                  de:'herzlichen Glückwunsch', ja:'おめでとう', ro:'omedetou',
+                  ru:'поздравляю', zh:'恭喜', py:'gōng xǐ' },
+  'happy birthday': { es:'feliz cumpleaños', it:'buon compleanno', fr:'joyeux anniversaire',
+                  de:'alles Gute zum Geburtstag', ja:'お誕生日おめでとう', ro:'otanjoubi omedetou',
+                  ru:'с днём рождения', zh:'生日快乐', py:'shēng rì kuài lè' },
+  'happy new year': { es:'feliz año nuevo', it:'buon anno', fr:'bonne année',
+                  de:'frohes neues Jahr', ja:'あけましておめでとう', ro:'akemashite omedetou',
+                  ru:'с Новым годом', zh:'新年快乐', py:'xīn nián kuài lè' },
+  'merry christmas': { es:'feliz navidad', it:'buon natale', fr:'joyeux noël',
+                  de:'frohe Weihnachten', ja:'メリークリスマス', ro:'merii kurisumasu',
+                  ru:'с Рождеством', zh:'圣诞快乐', py:'shèng dàn kuài lè' },
+  'where is the bathroom': { es:'¿dónde está el baño?', it:"dov'è il bagno?",
+                  fr:'où sont les toilettes', de:'wo ist die Toilette',
+                  ja:'トイレはどこですか', ro:'toire wa doko desu ka',
+                  ru:'где туалет', zh:'洗手间在哪里', py:'xǐ shǒu jiān zài nǎ lǐ' },
+  'how much':   { es:'¿cuánto cuesta?', it:'quanto costa?', fr:'combien ça coûte',
+                  de:'wie viel kostet das', ja:'いくらですか', ro:'ikura desu ka',
+                  ru:'сколько это стоит', zh:'多少钱', py:'duō shǎo qián' },
+  'i do not understand': { es:'no entiendo', it:'non capisco', fr:'je ne comprends pas',
+                  de:'ich verstehe nicht', ja:'わかりません', ro:'wakarimasen',
+                  ru:'я не понимаю', zh:'我不明白', py:'wǒ bù míng bai' },
+  'i do not know': { es:'no sé', it:'non lo so', fr:'je ne sais pas', de:'ich weiß nicht',
+                  ja:'知りません', ro:'shirimasen', ru:'я не знаю', zh:'我不知道', py:'wǒ bù zhī dào' },
+  'help':       { es:'ayuda', it:'aiuto', fr:'au secours', de:'Hilfe',
+                  ja:'助けて', ro:'tasukete', ru:'помогите', zh:'救命', py:'jiù mìng' },
+  'water':      { es:'agua', it:'acqua', fr:'eau', de:'Wasser',
+                  ja:'水', ro:'mizu', ru:'вода', zh:'水', py:'shuǐ' },
+  'food':       { es:'comida', it:'cibo', fr:'nourriture', de:'Essen',
+                  ja:'食べ物', ro:'tabemono', ru:'еда', zh:'食物', py:'shí wù' },
+  'beer':       { es:'cerveza', it:'birra', fr:'bière', de:'Bier',
+                  ja:'ビール', ro:'biiru', ru:'пиво', zh:'啤酒', py:'pí jiǔ' },
+  'coffee':     { es:'café', it:'caffè', fr:'café', de:'Kaffee',
+                  ja:'コーヒー', ro:'koohii', ru:'кофе', zh:'咖啡', py:'kā fēi' },
+  'friend':     { es:'amigo', it:'amico', fr:'ami', de:'Freund',
+                  ja:'友達', ro:'tomodachi', ru:'друг', zh:'朋友', py:'péng you' },
+  'love':       { es:'amor', it:'amore', fr:'amour', de:'Liebe',
+                  ja:'愛', ro:'ai', ru:'любовь', zh:'爱', py:'ài' },
+  'good':       { es:'bueno', it:'buono', fr:'bon', de:'gut',
+                  ja:'良い', ro:'yoi', ru:'хорошо', zh:'好', py:'hǎo' },
+  'beautiful':  { es:'hermoso', it:'bello', fr:'beau', de:'schön',
+                  ja:'美しい', ro:'utsukushii', ru:'красивый', zh:'美丽', py:'měi lì' },
+  'delicious':  { es:'delicioso', it:'delizioso', fr:'délicieux', de:'lecker',
+                  ja:'おいしい', ro:'oishii', ru:'вкусно', zh:'好吃', py:'hǎo chī' },
+  'nice to meet you': { es:'mucho gusto', it:'piacere', fr:'enchanté', de:'freut mich',
+                  ja:'はじめまして', ro:'hajimemashite', ru:'приятно познакомиться',
+                  zh:'很高兴认识你', py:'hěn gāo xìng rèn shi nǐ' },
+  'see you later': { es:'hasta luego', it:'a dopo', fr:'à plus tard', de:'bis später',
+                  ja:'またね', ro:'mata ne', ru:'до скорого', zh:'回头见', py:'huí tóu jiàn' },
+  'take care':  { es:'cuídate', it:'stammi bene', fr:'prends soin de toi',
+                  de:'pass auf dich auf', ja:'お大事に', ro:'odaiji ni',
+                  ru:'береги себя', zh:'保重', py:'bǎo zhòng' },
+  'what is your name': { es:'¿cómo te llamas?', it:'come ti chiami?',
+                  fr:"comment tu t'appelles", de:'wie heißt du',
+                  ja:'お名前は何ですか', ro:'onamae wa nan desu ka',
+                  ru:'как тебя зовут', zh:'你叫什么名字', py:'nǐ jiào shén me míng zi' },
+  'my name is': { es:'me llamo', it:'mi chiamo', fr:"je m'appelle", de:'ich heiße',
+                  ja:'私の名前は', ro:'watashi no namae wa', ru:'меня зовут',
+                  zh:'我叫', py:'wǒ jiào' }
+};
+
+function normaliseKey(text) {
+  return text.toLowerCase().trim().replace(/[.!?,;:¡¿"'']+$/g, '').replace(/\s+/g, ' ');
+}
+
+function offlineLookup(text, code) {
+  const entry = OFFLINE[normaliseKey(text)];
+  if (!entry) return null;
+  const native = entry[code];
+  if (!native) return null;
+  let override = '';
+  if (code === 'ja' && entry.ro) override = entry.ro;
+  if (code === 'zh-CN' && entry.py) override = entry.py;
+  return { text: native, override };
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   12.  FREE TRANSLATION + ROMANIZATION  (no API key, no signup)
+   ═══════════════════════════════════════════════════════════════ */
+const GOOGLE_EP = 'https://translate.googleapis.com/translate_a/single';
+const GOOGLE_ALT = 'https://clients5.google.com/translate_a/t';
+const cache = new Map();
+
+/* --- persistent cache (survives reloads, works offline) --- */
+const LS_KEY = 'sayit.cache.v1';
+let lsCache = {};
+try { lsCache = JSON.parse(localStorage.getItem(LS_KEY) || '{}') || {}; } catch (e) { lsCache = {}; }
+
+let saveTimer = null;
+function persistCache() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    try {
+      const keys = Object.keys(lsCache);
+      if (keys.length > 400) {
+        keys.slice(0, keys.length - 400).forEach(k => delete lsCache[k]);
+      }
+      localStorage.setItem(LS_KEY, JSON.stringify(lsCache));
+    } catch (e) { /* quota / private mode — ignore */ }
+  }, 400);
+}
+
+/* --- helper: first non-empty string anywhere in a JSON blob --- */
+function firstString(o) {
+  if (typeof o === 'string' && o.trim()) return o.trim();
+  if (Array.isArray(o)) {
+    for (const x of o) { const r = firstString(x); if (r) return r; }
+  }
+  return '';
+}
+
+/* --- endpoint 1: translate.googleapis.com --- */
+async function googleTranslate(text, from, to) {
+  const url = `${GOOGLE_EP}?client=gtx&sl=${encodeURIComponent(from)}&tl=${encodeURIComponent(to)}&dt=t&q=${encodeURIComponent(text)}`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('gtx ' + res.status);
+  const data = await res.json();
+  const segs = data && data[0];
+  if (!Array.isArray(segs)) throw new Error('bad payload');
+  const out = segs.map(s => (s && typeof s[0] === 'string') ? s[0] : '').join('').trim();
+  if (!out) throw new Error('empty');
+  return out;
+}
+
+/* --- endpoint 2: clients5.google.com (different host, same family) --- */
+async function googleAltTranslate(text, from, to) {
+  const url = `${GOOGLE_ALT}?client=dict-chrome-ex&sl=${encodeURIComponent(from)}&tl=${encodeURIComponent(to)}&q=${encodeURIComponent(text)}`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('alt ' + res.status);
+  const data = await res.json();
+  const out = firstString(data);
+  if (!out) throw new Error('empty');
+  return out;
+}
+
+/* --- endpoint 3: MyMemory (fully open, CORS-friendly) --- */
+async function myMemoryTranslate(text, from, to) {
+  const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${encodeURIComponent(from + '|' + to)}`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('mymemory ' + res.status);
+  const data = await res.json();
+  const t = data && data.responseData && data.responseData.translatedText;
+  if (!t) throw new Error('empty');
+  return String(t).trim();
+}
+
+async function translate(text, from, to) {
+  const key = from + '>' + to + '>' + text;
+  if (cache.has(key)) return cache.get(key);
+  if (lsCache[key]) { cache.set(key, lsCache[key]); return lsCache[key]; }
+
+  const attempts = [
+    () => googleTranslate(text, from, to),
+    () => googleAltTranslate(text, from, to),
+    () => myMemoryTranslate(text, from, to)
+  ];
+
+  let lastErr;
+  for (const attempt of attempts) {
+    try {
+      const out = await attempt();
+      if (out) {
+        cache.set(key, out);
+        lsCache[key] = out;
+        persistCache();
+        return out;
+      }
+    } catch (e) { lastErr = e; }
+  }
+  throw lastErr || new Error('all translators failed');
+}
+
+/** Pull a latin-script romanization out of the free translate endpoint. */
+async function getRomanization(text, lang) {
+  const key = 'rm>' + lang + '>' + text;
+  if (cache.has(key)) return cache.get(key);
+  if (lsCache[key] !== undefined) { cache.set(key, lsCache[key]); return lsCache[key]; }
+
+  const url = `${GOOGLE_EP}?client=gtx&sl=${encodeURIComponent(lang)}&tl=${encodeURIComponent(lang)}&dt=rm&q=${encodeURIComponent(text)}`;
+  let result = '';
+  try {
+    const res = await fetch(url);
+    if (res.ok) {
+      const data = await res.json();
+      const strings = [];
+      (function walk(o) {
+        if (typeof o === 'string') { strings.push(o); return; }
+        if (Array.isArray(o)) { o.forEach(walk); }
+      })(data);
+
+      const isLatinOnly = s =>
+        /[a-zA-Z]/.test(s) &&
+        !/[\u4e00-\u9fff\u3040-\u30ff\u0400-\u04ff]/.test(s);
+      const isMetaCode = s => /^[a-z]{2}(-[A-Za-z]{2,4})?$/.test(s.trim());
+
+      const cands = strings
+        .filter(s => s && s.trim() && s !== text)
+        .filter(isLatinOnly)
+        .filter(s => !isMetaCode(s))
+        .sort((a, b) => b.length - a.length);
+
+      result = cands[0] || '';
+    }
+  } catch (e) { /* offline → caller falls back to local transliteration */ }
+
+  cache.set(key, result);
+  lsCache[key] = result;
+  persistCache();
+  return result;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   13.  ORCHESTRATION
+   ═══════════════════════════════════════════════════════════════ */
+async function phoneticFor(lang, translation, override) {
+  try {
+    if (override) {
+      if (lang.code === 'ja') return jaRomajiToPhonetic(override);
+      if (lang.code === 'zh-CN') return zhPhonetic(override);
+    }
+    switch (lang.code) {
+      case 'en': return phonEn(translation);
+      case 'es': return phonEs(translation);
+      case 'it': return phonIt(translation);
+      case 'fr': return phonFr(translation);
+      case 'de': return phonDe(translation);
+
+      case 'ja': {
+        let romaji = await getRomanization(translation, 'ja');
+        if (!romaji || !/^[a-zA-Z\s'\-]+$/.test(romaji)) romaji = kanaToRomaji(translation);
+        return jaRomajiToPhonetic(romaji);
+      }
+      case 'ru': {
+        let latin = await getRomanization(translation, 'ru');
+        if (!latin) latin = cyrillicToLatin(translation);
+        return ruPhon(latin);
+      }
+      case 'zh-CN': {
+        const pinyin = await getRomanization(translation, 'zh-CN');
+        return zhPhonetic(pinyin);
+      }
+    }
+  } catch (e) { /* fall through */ }
+  return '';
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   14.  UI
+   ═══════════════════════════════════════════════════════════════ */
+const $q      = document.getElementById('q');
+const $btn    = document.getElementById('btn');
+const $rows   = document.getElementById('rows');
+const $status = document.getElementById('status');
+const $chips  = document.getElementById('chips');
+
+const EXAMPLES = [
+  'hello', 'thank you', 'good morning', 'i love you',
+  'where is the bathroom', 'cheers', 'goodbye', 'excuse me'
+];
+
+EXAMPLES.forEach(ex => {
+  const b = document.createElement('button');
+  b.className = 'chip';
+  b.type = 'button';
+  b.textContent = ex;
+  b.addEventListener('click', () => { $q.value = ex; run(); });
+  $chips.appendChild(b);
 });
 
-q.addEventListener('input',()=>{
- clearTimeout(timer);
- timer=setTimeout(run,650)
+LANGS.forEach(L => {
+  const row = document.createElement('div');
+  row.className = 'row';
+  row.dataset.lang = L.code;
+  row.innerHTML =
+    '<div class="cell langcell"><span class="flag">' + L.flag + '</span><span>' + L.label + '</span></div>' +
+    '<div class="cell transcell"><span class="trans-text"><span class="skel"></span></span></div>' +
+    '<div class="cell phoncell"><span class="skel"></span></div>';
+  $rows.appendChild(row);
 });
 
-build();
+function setRow(code, translation, phonetic, speechLang, isError) {
+  const row = $rows.querySelector('.row[data-lang="' + code + '"]');
+  if (!row) return;
+
+  const tCell = row.querySelector('.transcell');
+  const pCell = row.querySelector('.phoncell');
+
+  tCell.innerHTML = '';
+  const span = document.createElement('span');
+  span.className = 'trans-text';
+  span.textContent = translation || '—';
+  tCell.appendChild(span);
+
+  pCell.textContent = phonetic || '—';
+  pCell.classList.toggle('na', !phonetic || !!isError);
+
+  /* speak */
+  if (translation && translation !== '—' && 'speechSynthesis' in window) {
+    const b = document.createElement('button');
+    b.className = 'iconbtn';
+    b.type = 'button';
+    b.title = 'Hear it';
+    b.textContent = '🔊';
+    b.addEventListener('click', ev => {
+      ev.stopPropagation();
+      try {
+        speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(translation);
+        u.lang = speechLang;
+        u.rate = 0.85;
+        speechSynthesis.speak(u);
+      } catch (e) {}
+    });
+    tCell.appendChild(b);
+  }
+
+  /* copy */
+  if (translation && translation !== '—') {
+    const c = document.createElement('button');
+    c.className = 'iconbtn';
+    c.type = 'button';
+    c.title = 'Copy translation + pronunciation';
+    c.textContent = '⧉';
+    c.addEventListener('click', ev => {
+      ev.stopPropagation();
+      const txt = phonetic ? translation + '  (' + phonetic + ')' : translation;
+      const done = () => {
+        c.textContent = '✓';
+        c.classList.add('copied');
+        setTimeout(() => { c.textContent = '⧉'; c.classList.remove('copied'); }, 1200);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(txt).then(done).catch(() => {});
+      } else {
+        const ta = document.createElement('textarea');
+        ta.value = txt;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); done(); } catch (e) {}
+        document.body.removeChild(ta);
+      }
+    });
+    tCell.appendChild(c);
+  }
+}
+
+function setLoading() {
+  LANGS.forEach(L => {
+    const row = $rows.querySelector('.row[data-lang="' + L.code + '"]');
+    row.querySelector('.transcell').innerHTML = '<span class="skel"></span>';
+    row.querySelector('.phoncell').innerHTML = '<span class="skel"></span>';
+    row.querySelector('.phoncell').classList.remove('na');
+  });
+}
+
+/* --- main run with stale-request protection --- */
+let runToken = 0;
+let debounceTimer = null;
+
+async function run() {
+  const text = $q.value.trim();
+  if (!text) { $status.textContent = ''; return; }
+
+  const token = ++runToken;
+  $btn.disabled = true;
+  $status.className = 'status';
+  $status.textContent = 'Translating…';
+  setLoading();
+
+  let failures = 0;
+  let offlineCount = 0;
+
+  await Promise.all(LANGS.map(async L => {
+    try {
+      if (L.code === 'en') {
+        if (token === runToken) setRow('en', text, phonEn(text), L.speech, false);
+        return;
+      }
+
+      /* 1. offline dictionary first — instant and always available */
+      const off = offlineLookup(text, L.code);
+      if (off) {
+        offlineCount++;
+        const ph = await phoneticFor(L, off.text, off.override);
+        if (token === runToken) setRow(L.code, off.text, ph, L.speech, false);
+        return;
+      }
+
+      /* 2. network translation */
+      const tr = await translate(text, 'en', L.code);
+      if (token !== runToken) return;
+      const ph = await phoneticFor(L, tr);
+      if (token === runToken) setRow(L.code, tr, ph, L.speech, false);
+
+    } catch (e) {
+      failures++;
+      if (token === runToken) setRow(L.code, '—', '—', L.speech, true);
+    }
+  }));
+
+  if (token !== runToken) return;
+  $btn.disabled = false;
+
+  if (failures === LANGS.length - 1) {
+    $status.className = 'status err';
+    $status.textContent = 'Could not reach any free translation service. Check your connection, or try one of the built-in example phrases.';
+  } else if (failures > 0) {
+    $status.className = 'status err';
+    $status.textContent = 'Done — ' + failures + ' language' + (failures > 1 ? 's' : '') + ' could not be reached.';
+  } else if (offlineCount >= LANGS.length - 1) {
+    $status.className = 'status ok';
+    $status.textContent = 'Loaded from the built-in offline dictionary — no internet needed. Tap 🔊 to hear any row.';
+  } else {
+    $status.className = 'status';
+    $status.textContent = 'Tap 🔊 to hear any row spoken aloud.';
+  }
+}
+
+/* --- events --- */
+$btn.addEventListener('click', run);
+$q.addEventListener('keydown', e => {
+  if (e.key === 'Enter') { clearTimeout(debounceTimer); run(); }
+});
+$q.addEventListener('input', () => {
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(run, 650);
+});
+
+/* --- shareable URL: ?q=hello --- */
+(function initFromUrl() {
+  try {
+    const params = new URLSearchParams(location.search);
+    const q = params.get('q');
+    if (q) $q.value = q;
+  } catch (e) {}
+})();
+
 run();
 </script>
 </body>
